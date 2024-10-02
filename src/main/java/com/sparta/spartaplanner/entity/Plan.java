@@ -1,6 +1,7 @@
 package com.sparta.spartaplanner.entity;
 
 import com.sparta.spartaplanner.dto.PlanRequestDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Plan {
     private Long id;
     private String title;
