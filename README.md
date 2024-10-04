@@ -1,6 +1,8 @@
 # SpartaPlanner
 
-Spring JDBC 활용 및 CRUD API 구현 숙달을 위한 일정관리 API 만들기
+Spring JDBC 활용 및 CRUD API 구현 숙달을 위한 일정관리 API
+
+남은 할 일: Domain, Service 분리, Web View 구현
 
 ## API Table
 
