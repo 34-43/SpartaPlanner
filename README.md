@@ -268,7 +268,7 @@ class user {
    bigint id
 }
 
-plan  -->  user
+plan  -->  user : FK(user_id -> id)
 ```
 
 ## Project Hierarchy
