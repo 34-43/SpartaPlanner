@@ -1,6 +1,6 @@
 package com.sparta.spartaplanner.entity;
 
-import com.sparta.spartaplanner.dto.PlanRequestDto;
+import com.sparta.spartaplanner.dto.PlanFormRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,19 +14,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Plan {
     private Long id;
+    private Long userId;
     private String title;
     private String content;
-    private String username;
-    private LocalDateTime createdDatetime;
-    private LocalDateTime lastDatetime;
-    private String password;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public Plan(PlanRequestDto planRequestDto) {
+    public Plan(PlanFormRequestDto planRequestDto) {
         this.title = planRequestDto.getTitle();
         this.content = planRequestDto.getContent();
-        this.username = planRequestDto.getUsername();
-        this.password = planRequestDto.getPassword();
-        this.createdDatetime = LocalDateTime.now();
-        this.lastDatetime = this.createdDatetime;
+        this.userId = planRequestDto.getUserId();
     }
 }
