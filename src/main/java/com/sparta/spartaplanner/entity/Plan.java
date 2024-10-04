@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+// Plan 테이블과 대응되는 단순 Entity
+
 @Getter
 @Setter
 @NoArgsConstructor

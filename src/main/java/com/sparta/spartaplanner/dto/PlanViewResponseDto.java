@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
+// Plan 을 조회하였을 때 Plan 과 연관된 User 의 필요한 정보만을 전달하는 응답 Dto
+
 @Getter
 @Setter
 @NoArgsConstructor

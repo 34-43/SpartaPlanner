@@ -1,6 +1,6 @@
 package com.sparta.spartaplanner.controller;
 
-import com.sparta.spartaplanner.dto.PlanFilterDto;
+import com.sparta.spartaplanner.dto.PlanFilterRequestDto;
 import com.sparta.spartaplanner.dto.PlanFormRequestDto;
 import com.sparta.spartaplanner.dto.PlanViewResponseDto;
 import com.sparta.spartaplanner.entity.Plan;
@@ -25,6 +25,7 @@ public class PlannerController {
     private final PlannerRepository plannerRepository;
     private final UserRepository userRepository;
 
+    // Plan 테이블 조작을 위해 User 의 password 필드를 검사하기 때문에, 두 테이블 각각의 Repo 를 필요로 함.
     public PlannerController(JdbcTemplate jdbcTemplate) {
         this.plannerRepository = new PlannerRepository(jdbcTemplate);
         this.userRepository = new UserRepository(jdbcTemplate);
@@ -53,14 +54,15 @@ public class PlannerController {
 
     // 계획 전체 조회 API
     @GetMapping("")
-    public List<PlanViewResponseDto> getAllPlans(@ModelAttribute PlanFilterDto filter) {
+    public List<PlanViewResponseDto> getAllPlans(@ModelAttribute PlanFilterRequestDto filter) {
         // 요청된 필터 Dto 값을 받아 repository 에 전달하여 쿼리 수행
         List<Plan> queriedPlanList = plannerRepository.readAllPlans(filter.getUserId(),filter.getDate(),filter.getSort());
+
         // 읽어들인 Entity 리스트 -> 응답 Dto 리스트 반환
         return queriedPlanList.stream().map(this::ResDtoWithUserInfo).toList();
     }
 
-    // 계획 id 로 조회 API
+    // 계획 조회 API
     @GetMapping("{id}")
     public PlanViewResponseDto getPlan(@PathVariable Long id) {
         // 기본 키로 nullable 데이터 조회
@@ -70,11 +72,11 @@ public class PlannerController {
             return ResDtoWithUserInfo(plan);
         } else {
             // 아닐 시, 예외 전달
-            throw new IllegalArgumentException("Plan with id " + id + " not found");
+            throw new IdNotFoundException("Plan", id);
         }
     }
 
-    // 계획 id 로 수정 API
+    // 계획 수정 API
     @PutMapping("{id}")
     public Long updatePlan(@PathVariable Long id, @RequestBody PlanFormRequestDto requestDto) {
         // 요청 일정과 해당 사용자 존재 확인
@@ -89,7 +91,7 @@ public class PlannerController {
         return plannerRepository.updatePlan(id, requestPlan);
     }
 
-    // 계획 id 로 삭제 API
+    // 계획 삭제 API
     @DeleteMapping("{id}")
     public Long deletePlan(@PathVariable Long id, @RequestHeader Map<String, String> headers) {
         // 요청 일정과 해당 사용자 존재 확인
@@ -103,6 +105,7 @@ public class PlannerController {
         return plannerRepository.deletePlan(id);
     }
 
+    // 계획 정보에 포함된 사용자 id 를 기반으로, 사용자 세부 정보를 포함한 계획 응답 Dto 를 반환하는 메서드
     public PlanViewResponseDto ResDtoWithUserInfo(Plan plan) {
         // 사용자 존재 조회
         Long userId = plan.getUserId();
@@ -120,12 +123,14 @@ public class PlannerController {
         return res;
     }
 
+    // 사용자 id 를 기반으로 입력된 비밀번호가 맞는 지 확인하고, 아닐 시 예외를 전달하는 메서드
     private void verifyUserPassword(Long userId, String password) throws PasswordFailException {
         if (!password.equals(userRepository.getPassword(userId))) {
             throw new PasswordFailException();
         }
     }
 
+    // 계획 id 를 기반으로, 해당 계획이 저장하고 있는 사용자 id 를 반환하고, 문제가 있으면 예외를 전달하는 메서드
     private Long verifyUserId(Long planId) {
         // 요청 일정 존재 조회
         Plan targetPlan = plannerRepository.readPlan(planId);
@@ -140,6 +145,7 @@ public class PlannerController {
         return userId;
     }
 
+    // 발생한 예외를 적절한 응답으로 처리하는 Handler
     @ExceptionHandler(FailedRequestException.class)
     public ResponseEntity<String> handleFailedRequestException(FailedRequestException e) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());

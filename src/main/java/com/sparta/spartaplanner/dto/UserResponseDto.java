@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+// User 를 조회하는 데에 필요한 정보를 전달하는 응답 Dto
+
 @Getter
 @Setter
 @NoArgsConstructor
