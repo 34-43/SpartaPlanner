@@ -11,20 +11,20 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlanResponseDto {
+public class PlanViewResponseDto {
     private Long id;
     private String title;
     private String content;
     private String username;
-    private LocalDateTime createdDatetime;
-    private LocalDateTime lastDatetime;
+    private String email;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public PlanResponseDto(Plan plan) {
+    public PlanViewResponseDto(Plan plan) {
         this.id = plan.getId();
         this.title = plan.getTitle();
         this.content = plan.getContent();
-        this.username = plan.getUsername();
-        this.createdDatetime = plan.getCreatedDatetime();
-        this.lastDatetime = plan.getLastDatetime();
+        this.createdAt = plan.getCreatedAt();
+        this.updatedAt = plan.getUpdatedAt();
     }
 }

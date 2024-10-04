@@ -5,9 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PlanRequestDto {
+public class PlanFormRequestDto {
+    private Long userId;
     private String title;
     private String content;
-    private String username;
     private String password;
 }
