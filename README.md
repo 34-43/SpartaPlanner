@@ -266,7 +266,7 @@ class user {
    bigint id
 }
 
-plan  -->  user : user_id:id
+plan  -->  user
 ```
 
 ## Project Hierarchy
